@@ -2,7 +2,7 @@
 
 /**
  * Our homepage. Show the most recently added quote.
- * 
+ *
  * controllers/Welcome.php
  *
  * ------------------------------------------------------------------------
@@ -21,8 +21,18 @@ class Welcome extends Application {
     function index()
     {
 	$this->data['pagebody'] = 'justone';    // this is the view we want shown
-	$this->data = array_merge($this->data, (array) $this->quotes->last());
-	$this->render();
+    // Display the last quote in the home page
+    //$this->data = array_merge($this->data, (array) $this->quotes->last());
+
+    // Display a random quote at the homepage
+    $choice = rand(1, $this->quotes->size());
+    $this->data = array_merge($this->data, (array) $this->quotes->get($choice));
+
+    $this->data['average'] = ($this->data['vote_count'] > 0) ?
+        ($this->data['vote_total'] / $this->data['vote_count']) : 0;
+
+    $this->caboose->needed('jrating','hollywood');
+    $this->render();
     }
 
 }
